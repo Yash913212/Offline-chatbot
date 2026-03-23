@@ -1,192 +1,136 @@
-# Setup Instructions
+# Setup Guide (Simple)
 
-This document explains how to set up and run the Offline Customer Support Chatbot project.
+Follow these steps to run the offline chatbot project.
 
-## Prerequisites
+## What you need first
 
-- Python 3.8 or higher
-- Ollama installed on your machine
-- Internet connection (for initial setup only; chatbot runs offline)
+- Python 3.8+
+- Ollama installed
+- Internet once, to download the model
 
-## Step 1: Install Ollama
+## 1. Install Ollama
 
-1. Visit the official [Ollama website](https://ollama.ai)
-2. Download the installer for your operating system (macOS, Windows, or Linux)
-3. Follow the installation instructions for your platform
+Download and install from `https://ollama.ai`.
 
-### Verify Installation
+Check installation:
 
-Open your terminal/command prompt and run:
 ```bash
 ollama --version
 ```
 
-You should see the version number printed.
-
-## Step 2: Download the Llama 3.2 3B Model
-
-Once Ollama is installed, download the Llama 3.2 3B model. This is approximately 2GB in size and may take several minutes depending on your internet connection.
+## 2. Download the model
 
 ```bash
 ollama pull llama3.2:3b
 ```
 
-### Test the Model (Optional)
-
-To verify the model works, you can test it interactively:
+Optional test:
 
 ```bash
 ollama run llama3.2:3b
 ```
 
-You should see a prompt where you can type a message. Type a test query and press Enter. Type `/bye` to exit.
+Type a message to test, then use `/bye` to exit.
 
-## Step 3: Set Up Python Environment
+## 3. Create Python environment
 
-Navigate to your project directory and create a virtual environment:
+Linux/macOS:
 
-### On Linux/macOS:
 ```bash
 cd /path/to/Offline-chatbot
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-### On Windows:
+Windows:
+
 ```bash
 cd C:\path\to\Offline-chatbot
 python -m venv venv
 venv\Scripts\activate
 ```
 
-## Step 4: Install Python Dependencies
-
-With the virtual environment activated, install the required packages:
+## 4. Install dependency
 
 ```bash
 pip install requests
 ```
 
-The `requests` library is needed to communicate with the Ollama API.
+## 5. Make sure Ollama is running
 
-## Step 5: Ensure Ollama is Running
+Linux check:
 
-Before running the chatbot, make sure the Ollama server is running:
-
-### On macOS and Windows:
-- Open the Ollama application. It should appear as an icon in your menu bar (macOS) or system tray (Windows).
-
-### On Linux:
-Check the status of the Ollama service:
 ```bash
 systemctl --user status ollama
 ```
 
-If it's not running, start it with:
+Start if needed:
+
 ```bash
 systemctl --user start ollama
 ```
 
-If you don't have systemctl (e.g., on a system without systemd), you can start Ollama manually by running the Ollama executable.
+If `systemctl` is not available, start Ollama manually.
 
-## Step 6: Run the Chatbot
-
-With Ollama running and dependencies installed, execute the chatbot script:
+## 6. Run the script
 
 ```bash
 python3 chatbot.py
 ```
 
-### What to Expect
+What happens:
 
-1. The script will verify the connection to the Ollama server
-2. It will load the prompt templates from the `prompts/` directory
-3. For each of the 20 customer queries, it will:
-   - Generate a zero-shot response (using instructions only)
-   - Generate a one-shot response (using instructions + an example)
-4. All responses will be logged to `eval/results.md`
-5. The script will display progress as it runs
+1. The script checks Ollama connection.
+2. It loads prompt templates.
+3. It runs 20 queries with zero-shot and one-shot prompts.
+4. It saves output to `eval/results.md`.
 
-**Note:** Depending on your hardware, this process may take 15-60 minutes. The time depends on:
-- CPU speed (running on CPU is slower than GPU)
-- RAM available
-- System load
+Runtime can be 15 to 60 minutes depending on your machine.
 
-## Step 7: Evaluate Results
+## 7. Score the results
 
-After the script completes:
+Open `eval/results.md` and fill scores (1 to 5):
 
-1. Open `eval/results.md` in a text editor or Markdown viewer
-2. For each response, assign scores (1-5) in the following columns:
-   - **Relevance**: How well does the response address the query?
-   - **Coherence**: Is the response grammatically correct and clear?
-   - **Helpfulness**: Does the response provide useful, actionable information?
-3. Save the file
+- Relevance
+- Coherence
+- Helpfulness
 
-## Step 8: Generate the Report
+## 8. Write report
 
-Based on your manual scoring, create a comprehensive analysis in `report.md`:
+Use your scores to update `report.md`.
 
-- Summarize the quantitative results
-- Compare zero-shot and one-shot performance
-- Discuss specific examples
-- Analyze the suitability of Llama 3.2 3B for customer support
-- Document limitations and next steps
+Include:
+
+- average scores
+- zero-shot vs one-shot comparison
+- strengths and weak points
+- final recommendation
 
 ## Troubleshooting
 
-### Issue: "Could not connect to Ollama server"
+Issue: Cannot connect to Ollama
 
-**Solution:** Ensure Ollama is running. Verify that it's accessible at `http://localhost:11434`. You can test this in your browser or with:
-```bash
-curl http://localhost:11434/api/tags
-```
+- Check server: `curl http://localhost:11434/api/tags`
+- Ensure Ollama is running
 
-### Issue: "Model not found" error
+Issue: Model not found
 
-**Solution:** Ensure you've pulled the model with:
-```bash
-ollama pull llama3.2:3b
-```
+- Run: `ollama pull llama3.2:3b`
+- Verify: `ollama list`
 
-Verify it's installed by checking:
-```bash
-ollama list
-```
+Issue: Too slow
 
-### Issue: Very slow responses
+- CPU inference is usually slow
+- Close heavy apps
+- Use GPU if possible
 
-**Solution:** This is normal when running on CPU. Llama 3.2 3B may take 30-120 seconds per response depending on your hardware. To speed up:
-- Close other applications to free up RAM
-- Ensure your system is not running other heavy processes
-- Consider using a machine with a GPU for faster inference
+Issue: Out of memory
 
-### Issue: Out of memory errors
+- Llama 3.2 3B usually needs about 2 to 4 GB RAM
+- Close apps or try a smaller model
 
-**Solution:** The Llama 3.2 3B quantized model requires approximately 2-4GB of RAM. If you're running out of memory:
-- Close other applications
-- Consider using a smaller model like Phi-3 Mini
-- Check available RAM on your system
+## Useful links
 
-## Next Steps
-
-After completing the evaluation and scoring:
-
-1. Analyze patterns in model performance
-2. Compare zero-shot vs. one-shot results
-3. Document findings in `report.md`
-4. Consider extensions:
-   - Testing different models (e.g., Mistral 7B, Phi-3)
-   - Adding few-shot prompting (multiple examples)
-   - Integrating with a knowledge base for business-specific information
-   - Evaluating response time and resource usage
-
-## Additional Resources
-
-- [Ollama Documentation](https://github.com/ollama/ollama)
-- [Llama 3.2 Model Card](https://huggingface.co/meta-llama/Llama-3.2-3B)
-- [Prompt Engineering Guide](https://www.promptingguide.ai/)
-
----
-
-For questions or issues, refer to the README.md or troubleshooting section above.
+- https://github.com/ollama/ollama
+- https://huggingface.co/meta-llama/Llama-3.2-3B
+- https://www.promptingguide.ai/

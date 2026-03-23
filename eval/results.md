@@ -2,11 +2,15 @@
 
 ## Date: 2026-03-17 09:14:29
 
-### Scoring Rubric
+### How to score each response
 
-- **Relevance (1-5)**: How well does the response address the customer's query? (1 = Irrelevant, 5 = Perfectly relevant)
-- **Coherence (1-5)**: Is the response grammatically correct and easy to understand? (1 = Incoherent, 5 = Flawless)
-- **Helpfulness (1-5)**: Does the response provide a useful, actionable answer? (1 = Not helpful, 5 = Very helpful)
+- **Relevance (1-5)**: Does the response answer the question?
+- **Coherence (1-5)**: Is the response clear and grammatically correct?
+- **Helpfulness (1-5)**: Does the response give useful next steps?
+
+### Note
+
+The response text below is raw model output (shortened for table readability).
 
 ### Results Table
 
