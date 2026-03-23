@@ -1,0 +1,8 @@
+from chatbot import query_ollama, load_template
+
+# Test a single query
+prompt = load_template("prompts/zero_shot_template.txt")
+customer_query = "How do I track my order?"
+full_prompt = prompt.format(query=customer_query)
+response = query_ollama(full_prompt)
+print(response)
